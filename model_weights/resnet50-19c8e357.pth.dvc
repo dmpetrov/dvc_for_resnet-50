@@ -1,0 +1,8 @@
+md5: 772fd00117c693720922db14c458b668
+wdir: ..
+outs:
+- md5: 9e9c86b324d80e65229fab49b8d9a8e8
+  path: model_weights/resnet50-19c8e357.pth
+  cache: true
+  metric: false
+  persist: false
