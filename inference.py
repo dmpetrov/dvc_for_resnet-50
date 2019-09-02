@@ -39,8 +39,6 @@ def main():
     with open(os.path.join(args.data_dir, 'imagenet_synsets.txt'), 'r') as f:
         synsets = f.readlines()
 
-    # len(synsets)==1001
-    # sysnets[0] == background
     synsets = [x.strip() for x in synsets]
     splits = [line.split(' ') for line in synsets]
     key_to_classname = {spl[0]: ' '.join(spl[1:]) for spl in splits}
@@ -56,9 +54,8 @@ def main():
     class_id = argmax.item()
     class_key = class_id_to_key[class_id]
     classname = key_to_classname[class_key]
-    print()
-    print("'{}': '{}' is a '{}'".format(arch, img, classname))
-    print('Confidence that ', img, ' is in ', classname, 'is: ', max.item())
+
+    print("'{}': '{}' is a '{}' with {}% confidence".format(arch, img, classname, round(max.item(), 2)))
 
 
 if __name__ == '__main__':
