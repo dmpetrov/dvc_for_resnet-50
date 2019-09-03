@@ -8,9 +8,6 @@ import re
 
 __all__ = ['resnet50']
 
-with dvc_api.open('model_weights/resnet50-19c8e357.pth', remote='gsremote', mode="rb", encoding=None) as weights:
-    model_weights = torch.load(weights)
-
 input_sizes = {}
 means = {}
 stds = {}
@@ -24,7 +21,7 @@ pretrained_settings = {}
 
 for model_name in __all__:
     pretrained_settings[model_name] = {
-        'faster_rcnn_rs50': {
+        'resnet50': {
             'input_space': 'RGB',
             'input_size': input_sizes[model_name],
             'input_range': [0, 1],
@@ -54,7 +51,8 @@ def update_state_dict(state_dict):
 def load_pretrained(model, num_classes, settings):
     assert num_classes == settings['num_classes'], \
         "num_classes should be {}, but is {}".format(settings['num_classes'], num_classes)
-    model.load_state_dict(model_weights)
+    with dvc_api.open('model_weights/resnet50-19c8e357.pth', remote='gsremote', mode="rb", encoding=None) as weights:
+        model.load_state_dict(torch.load(weights))
     model.input_space = settings['input_space']
     model.input_size = settings['input_size']
     model.input_range = settings['input_range']
@@ -63,7 +61,6 @@ def load_pretrained(model, num_classes, settings):
     return model
 
 
-###############################################################
 # ResNets
 
 def modify_resnets(model):

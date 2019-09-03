@@ -27,10 +27,9 @@ def main():
     model.eval()
 
     # Load and Transform one input image
-    load_img = utils.LoadImage()
     tf_img = utils.TransformImage(model)
     img = os.path.join(args.data_dir, 'croco.jpg')
-    input_data = load_img(img)  # 3x400x225
+    input_data = utils.LoadImage(img)  # 3x400x225
     input_data = tf_img(input_data)  # 3x299x299
     input_data = input_data.unsqueeze(0)  # 1x3x299x299
     input = torch.autograd.Variable(input_data)
