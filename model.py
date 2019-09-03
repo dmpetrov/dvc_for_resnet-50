@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function, division, absolute_import
+import io
 import torchvision.models as models
 import dvc.api as dvc_api
 import torch
 import types
-import re
 
 __all__ = ['resnet50']
 
@@ -21,7 +21,7 @@ pretrained_settings = {}
 
 for model_name in __all__:
     pretrained_settings[model_name] = {
-        'resnet50': {
+        'imagenet': {
             'input_space': 'RGB',
             'input_size': input_sizes[model_name],
             'input_range': [0, 1],
@@ -35,8 +35,12 @@ for model_name in __all__:
 def load_pretrained(model, num_classes, settings):
     assert num_classes == settings['num_classes'], \
         "num_classes should be {}, but is {}".format(settings['num_classes'], num_classes)
-    with dvc_api.open('model_weights/resnet50-19c8e357.pth', remote='gsremote', mode="rb", encoding=None) as weights:
-        model.load_state_dict(torch.load(weights))
+    # with dvc_api.open('model_weights/resnet50-19c8e357.pth', remote='gsremote', mode="rb", encoding=None) as weights:
+    #     model_weights = torch.load(io.BytesIO(weights))
+    # model.load_state_dict(model_weights)
+    weights = dvc_api.read('model_weights/resnet50-19c8e357.pth', remote='gsremote', mode="rb", encoding=None)
+    model_weights = torch.load(io.BytesIO(weights))
+    model.load_state_dict(model_weights)
     model.input_space = settings['input_space']
     model.input_size = settings['input_size']
     model.input_range = settings['input_range']
@@ -51,6 +55,7 @@ def modify_resnets(model):
     # Modify attributs
     model.last_linear = model.fc
     model.fc = None
+    model.softmax = torch.nn.Softmax(dim=1)
 
     def features(self, input):
         x = self.conv1(input)
@@ -73,6 +78,7 @@ def modify_resnets(model):
     def forward(self, input):
         x = self.features(input)
         x = self.logits(x)
+        x = self.softmax(x)
         return x
 
     # Modify methods
