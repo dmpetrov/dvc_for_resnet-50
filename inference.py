@@ -5,6 +5,7 @@ import os
 import sys
 import pretrainedmodels
 import pretrainedmodels.utils as utils
+from PIL import Image
 
 sys.path.append('.')
 
@@ -29,7 +30,7 @@ def main():
     # Load and Transform one input image
     tf_img = utils.TransformImage(model)
     img = os.path.join(args.data_dir, 'croco.jpg')
-    input_data = utils.LoadImage(img)  # 3x400x225
+    input_data = Image.open(img)  # 3x400x225
     input_data = tf_img(input_data)  # 3x299x299
     input_data = input_data.unsqueeze(0)  # 1x3x299x299
     input = torch.autograd.Variable(input_data)
