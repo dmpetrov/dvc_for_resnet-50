@@ -35,11 +35,8 @@ for model_name in __all__:
 def load_pretrained(model, num_classes, settings):
     assert num_classes == settings['num_classes'], \
         "num_classes should be {}, but is {}".format(settings['num_classes'], num_classes)
-    # with dvc_api.open('model_weights/resnet50-19c8e357.pth', remote='gsremote', mode="rb", encoding=None) as weights:
-    #     model_weights = torch.load(io.BytesIO(weights))
-    # model.load_state_dict(model_weights)
-    weights = dvc_api.read('model_weights/resnet50-19c8e357.pth', remote='gsremote', mode="rb", encoding=None)
-    model_weights = torch.load(io.BytesIO(weights))
+    with dvc_api.open('model_weights/resnet50-19c8e357.pth', remote='gsremote', mode="rb", encoding=None) as weights:
+        model_weights = torch.load(weights)
     model.load_state_dict(model_weights)
     model.input_space = settings['input_space']
     model.input_size = settings['input_size']
