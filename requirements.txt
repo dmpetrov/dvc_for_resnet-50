@@ -1,0 +1,5 @@
+torch>=1.3.0
+torchvision>=0.4.1
+pretrainedmodels>=0.7.4
+Pillow-SIMD>=6.0.0
+dvc[gs]>=0.71.0
