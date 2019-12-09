@@ -1,5 +1,12 @@
 # dvc-in-use-example
 Inference of Resnet-50 model using [dvc](https://github.com/iterative/dvc).
+
+## Initialize
+
+```
+dvc pull
+```
+
 ## inference.py:
 Command line to run inference.py:
  ```
