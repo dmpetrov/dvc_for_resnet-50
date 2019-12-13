@@ -7,14 +7,12 @@ Inference of Resnet-50 model using [dvc](https://github.com/iterative/dvc).
 dvc pull
 ```
 
-## inference.py:
-Command line to run inference.py:
- ```
- python inference.py
- ```
-To choose an image add ```--img_path path/to/image/```, 'data/croco.jpg' is set by default.
-## tests.py:
-Command line to run tests:
 ```
- pytest -s tests/tests.py
+python train.py data/
 ```
+
+In the beggining of `main()` you can see different model importing options: .
+1. From torchvision moodel zoo
+2. From `pretrainedmodels` package
+3. From DVC (under development)
+
